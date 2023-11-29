@@ -1,10 +1,6 @@
 pipeline {
     agent any
-
-    tools {
-        nodejs 'NodeJS'
-    }
-
+	
     environment {
         DOCKER_IMAGE_NAME = "nikhilagarkar/train-schedule"
     }
