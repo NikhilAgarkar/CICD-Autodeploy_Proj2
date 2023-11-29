@@ -19,7 +19,7 @@ task zip(type: Zip) {
 		include "views/**"
 	}
 	into 'dist'
-	baseName "trainSchedule"
+	archiveBaseName = "trainSchedule"
 }
 
 //declare task dependencies
