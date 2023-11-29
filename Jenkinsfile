@@ -3,7 +3,6 @@ pipeline {
 
     tools {
         nodejs 'NodeJS'
-        docker 'docker'
     }
 
     environment {
@@ -32,10 +31,14 @@ pipeline {
             }
             steps {
                 script {
-                    app = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
-                    app.inside {
-                        sh 'npm install'
-                        sh 'npm run build'
+                    withDockerServer([uri: "tcp://docker-server:2376"]) {
+                        withDockerRegistry([url: "https://registry.hub.docker.com", credentialsId: 'docker_hub_login']) {
+                            app = docker.build("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
+                            app.inside {
+                                sh 'npm install'
+                                sh 'npm run build'
+                            }
+                        }
                     }
                 }
             }
@@ -47,7 +50,7 @@ pipeline {
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                    withDockerRegistry([url: "https://registry.hub.docker.com", credentialsId: 'docker_hub_login']) {
                         app.push("${DOCKER_IMAGE_NAME}:${env.BUILD_NUMBER}")
                         app.push("${DOCKER_IMAGE_NAME}:latest")
                     }
