@@ -1,10 +1,7 @@
 pipeline {
     agent any
 	
-	tools{
-		jdk 'JDK 11'
-	}
-	
+
     environment {
         DOCKER_IMAGE_NAME = "nikhilagarkar/train-schedule"
     }
