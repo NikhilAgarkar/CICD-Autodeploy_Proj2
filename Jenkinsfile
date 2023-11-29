@@ -1,5 +1,11 @@
 pipeline {
     agent any
+
+    tools {
+        nodejs 'NodeJS'
+        docker 'docker'
+    }
+
     environment {
         DOCKER_IMAGE_NAME = "nikhilagarkar/train-schedule"
     }
@@ -10,7 +16,7 @@ pipeline {
                 echo 'Running build automation'
                 script {
                     try {
-                        sh 'node --version'
+                        sh 'npm --version' // Ensure npm is available
                         sh './gradlew build --no-daemon'
                     } catch (Exception e) {
                         currentBuild.result = 'FAILURE'
